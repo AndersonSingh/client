@@ -122,10 +122,10 @@ public class GameClient {
     }
 
 
-    public static void main(String []args){
-
-        new GameClient();
-    }
+//    public static void main(String []args){
+//
+//        new GameClient();
+//    }
 
     static public class PlayerScores {
         public int player1Score;
