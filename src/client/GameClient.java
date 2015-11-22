@@ -35,9 +35,11 @@ public class GameClient {
 
     }
 
-    public GameClient(GameScreen gameScreen){
+    public GameClient(final GameScreen gameScreen){
         this.gameScreen=gameScreen;
         gameScreen.setAnswer1("HELLO");
+
+
         client = new Client();
         inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
@@ -76,14 +78,24 @@ public class GameClient {
 
 				if(obj instanceof Question){
 					// display question to client
+                    String[] options = ((Question) obj).getOptions();
+                    gameScreen.setAnswer1(options[0]);
+                    gameScreen.setAnswer2(options[1]);
+                    gameScreen.setAnswer3(options[2]);
+                    gameScreen.setAnswer4(options[3]);
 					// accept answer
-					// send answer to server
-
-                    System.out.println(((Question) obj).getText());
+                    //need to implement some sort of wait until user presses enter
+                    while(!gameScreen.getAnswered()){
+                        //induces a wait
+                    }
+                    //Once we have exited the while loop, this means that the user has pressed enter, meaning that they selected a choice
+//                  System.out.println(((Question) obj).getText());
 
                     QuestionResponse res = new QuestionResponse();
-                    res.answer = 4;
-
+//                  res.answer = 4;
+                    //Get answer from game screen
+                    res.answer=gameScreen.getUserAnswer();
+//                  send answer to server
                     connection.sendTCP(res);
                 }
 
@@ -91,6 +103,8 @@ public class GameClient {
                 if(obj instanceof PlayerScores){
                     // update scores
                     // display new scores
+                    gameScreen.setUserScore(((PlayerScores) obj).player1Score);
+                    gameScreen.setOpponentScore(((PlayerScores) obj).player2Score);
                 }
 
                 if(obj instanceof QuestionFeedback){

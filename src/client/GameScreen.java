@@ -15,12 +15,14 @@ public class GameScreen extends BasicGameState{
 	private int OPPONENT_SCORE;
 	private int MY_SCORE;
 	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,playerName="p1";
+	private boolean hasAnswered;
 	
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		
 		setOpponentScore(80);
 		setUserScore(80);
 		//Call server
+		hasAnswered=false;
 		setAnswer1("1962");
 		setAnswer2("1962");
 		setAnswer3("1962");
@@ -67,6 +69,7 @@ public class GameScreen extends BasicGameState{
 		if(gc.getInput().isKeyPressed(Input.KEY_ENTER)){
 			//Send response to server
 			//update ui elements
+			hasAnswered=true;
 		}
 	}
 
@@ -166,8 +169,12 @@ public class GameScreen extends BasicGameState{
 		OPPONENT_SCORE=oppScore;
 	}
 	
-	public String getUserAnswer(){
+	public int getUserAnswer(){
 		//use the SELCTED int variable and minus 1 to we can see the access index for the question that the user selected.
-		return null;
+		return SELECTED-1;
+	}
+
+	public boolean getAnswered(){
+		return hasAnswered;
 	}
 }

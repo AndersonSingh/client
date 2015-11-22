@@ -18,6 +18,7 @@ public class SimpleSlickGame extends StateBasedGame{
 			appgc = new AppGameContainer(new SimpleSlickGame("Home"));
 			appgc.setDisplayMode(800, 600, false);
 			appgc.setAlwaysRender(true);
+			appgc.setTargetFrameRate(60);
 			appgc.start();
 		} 
 		catch (SlickException e) {
