@@ -14,7 +14,7 @@ public class GameScreen extends BasicGameState{
 	private int SELECTED=1;
 	private int OPPONENT_SCORE;
 	private int MY_SCORE;
-	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message;
+	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,playerName="p1";
 	
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		
@@ -28,7 +28,8 @@ public class GameScreen extends BasicGameState{
 		setQuestion("When did Trinidad become an Independent Nation?");
 		setImageLocation("images/happy.png");
 		setMessage("The game is evenly matched!");
-		
+		GameClient gameClient = new GameClient(this);
+
 	}
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {

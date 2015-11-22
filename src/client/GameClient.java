@@ -18,6 +18,7 @@ public class GameClient {
     static int tcp_port = 8082;
     static int udp_port = 6789;
     BufferedReader inFromUser=null;
+    GameScreen gameScreen;
 
     // this function registers the various classes so object instances can be sent over the network
     static public void register(EndPoint endpoint){
@@ -34,7 +35,9 @@ public class GameClient {
 
     }
 
-    public GameClient(){
+    public GameClient(GameScreen gameScreen){
+        this.gameScreen=gameScreen;
+        gameScreen.setAnswer1("HELLO");
         client = new Client();
         inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
