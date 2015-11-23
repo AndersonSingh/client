@@ -23,7 +23,7 @@ public class MainScreen extends BasicGameState{
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		spriteSheet = new SpriteSheet("images/santa.png",165,173);
 		spriteAnimation = new Animation(spriteSheet,100);
-	    this.username = new TextField(gc, gc.getDefaultFont(), 280, 70, 200, 20);
+	    this.username = new TextField(gc, gc.getDefaultFont(), 220, 70, 200, 20);
 	    username.setBorderColor(Color.black);
         username.setBackgroundColor(Color.darkGray);
         username.setTextColor(Color.green);
@@ -57,9 +57,9 @@ public class MainScreen extends BasicGameState{
 		g.drawString("Quiz Wars", 50, 50);
 		g.drawString("Enter your name:", 50, 70);
 		g.drawString(">", 35, CURSOR_HEIGHT);
-		g.drawString("1.Start Game", 50, 130);
+		g.drawString("1. Start Game", 50, 130);
 		g.drawString("2. Instructions",50,150);
-		g.drawString("3.Exit Game", 50, 170);
+		g.drawString("3. Exit Game", 50, 170);
 		spriteAnimation.draw(500, 400);
 		username.render(gc, g);
 	}

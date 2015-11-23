@@ -7,6 +7,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 public class GameScreen extends BasicGameState{
 	private int TICK_HEIGHT=60;
@@ -15,7 +17,7 @@ public class GameScreen extends BasicGameState{
 	private int player2Score;
 	private int player1Score;
 	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,message2;
-	private boolean hasAnswered,serverStarted;
+	private boolean hasAnswered,serverStarted,gameOver,forfeit;
 	public static String player1Name,player2Name,username;
 	private int player;
 	GameClient gameClient;
@@ -26,6 +28,8 @@ public class GameScreen extends BasicGameState{
 
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		gameOver=false;
+		forfeit=false;
 		serverStarted=false;
 		setPlayer1Score(0);
 		setPlayer2Score(0);
@@ -43,6 +47,14 @@ public class GameScreen extends BasicGameState{
 	}
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
+		if(gameOver){
+			sbg.enterState(3, new FadeOutTransition(), new FadeInTransition());
+		}
+
+		if(forfeit){
+			sbg.enterState(4, new FadeOutTransition(), new FadeInTransition());
+		}
+
 		if(!serverStarted){
 			serverStarted=true;
 			gameClient = new GameClient(this);
@@ -213,4 +225,8 @@ public class GameScreen extends BasicGameState{
 	public void setAnswered(boolean ans){hasAnswered=ans;}
 
 	public void setPlayer(int player){this.player=player;}
+
+	public void setGameOver(boolean gameState){this.gameOver=gameState;}
+
+	public void setOpponentForfeit(boolean forfeit){	this.forfeit=forfeit;}
 }

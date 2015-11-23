@@ -7,10 +7,10 @@ import org.newdawn.slick.state.StateBasedGame;
 /**
  * Created by Shiva on 11/23/2015.
  */
-public class GameOverScreen extends BasicGameState {
+public class Forfeit extends BasicGameState{
     @Override
     public int getID() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -20,8 +20,7 @@ public class GameOverScreen extends BasicGameState {
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-        graphics.setColor(Color.orange);
-        graphics.drawString("Game is Over",280,50);
+        graphics.drawString("Opponent Quit .... You have won the game!!",250,100);
         graphics.setColor(Color.green);
         graphics.drawString("> Press 'Enter' to exit game.",50,130);
         graphics.setColor(Color.orange);
