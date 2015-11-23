@@ -10,60 +10,95 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class GameScreen extends BasicGameState{
 	private int TICK_HEIGHT=60;
-	private int TICK_WIDTH=260;
-	private int SELECTED=1;
-	private int OPPONENT_SCORE;
-	private int MY_SCORE;
-	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,playerName="p1";
-	private boolean hasAnswered;
-	
-	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		
-		setOpponentScore(80);
-		setUserScore(80);
-		//Call server
-		hasAnswered=false;
-		setAnswer1("1962");
-		setAnswer2("1962");
-		setAnswer3("1962");
-		setAnswer4("1962");
-		setQuestion("When did Trinidad become an Independent Nation?");
-		setImageLocation("images/happy.png");
-		setMessage("The game is evenly matched!");
-		GameClient gameClient = new GameClient(this);
+	private int TICK_WIDTH=360;
+	private int SELECTED;
+	private int player2Score;
+	private int player1Score;
+	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,message2;
+	private boolean hasAnswered,serverStarted;
+	public static String player1Name,player2Name,username;
+	private int player;
 
+	public static void setUserString(String str){
+		username=str;
+	}
+
+
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		serverStarted=false;
+		setPlayer1Score(0);
+		setPlayer2Score(0);
+		hasAnswered=false;
+		setPlayer1Name("...");
+		setPlayer2Name("...");
+		setAnswer1("...");
+		setAnswer2("...");
+		setAnswer3("...");
+		setAnswer4("...");
+		setQuestion("...");
+		setImageLocation("images/happy.png");
+		setMessage("...");
+		setMessage2("...");
 	}
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
-		if(OPPONENT_SCORE < MY_SCORE){
-			setImageLocation("images/happy.png");
-			setMessage("You are Winning!");
+		if(!serverStarted){
+			serverStarted=true;
+			GameClient gameClient = new GameClient(this);
 		}
-//		else if()
+
+		if(player==0){
+			if(player1Score > player2Score){
+				setImageLocation("images/happy.png");
+				setMessage("You are Winning!");
+			}
+			else if(player2Score>player1Score){
+				setImageLocation("images/sad.png");
+				setMessage("You are Loosing!");
+			}
+			else{
+				setImageLocation("images/happy.png");
+				setMessage("The game is even!");
+			}
+		}
+
+		if(player==1){
+			if(player2Score>player1Score){
+				setImageLocation("images/happy.png");
+				setMessage("You are Winning!");
+			}
+			else if(player1Score>player2Score){
+				setImageLocation("images/sad.png");
+				setMessage("You are Loosing!");
+			}
+			else{
+				setImageLocation("images/happy.png");
+				setMessage("The game is even!");
+			}
+		}
 		
 		if(gc.getInput().isKeyPressed(Input.KEY_1)){
 			TICK_HEIGHT=55;
-			TICK_WIDTH=260;
+			TICK_WIDTH=360;
 			SELECTED=1;
 		}
 		
 		if(gc.getInput().isKeyPressed(Input.KEY_3)){
 			TICK_HEIGHT=55;
-			TICK_WIDTH=310;
-			SELECTED=2;
+			TICK_WIDTH=410;
+			SELECTED=3;
 		}
 		
 		if(gc.getInput().isKeyPressed(Input.KEY_2)){
 			TICK_HEIGHT=555;
-			TICK_WIDTH=260;
-			SELECTED=3;
+			TICK_WIDTH=360;
+			SELECTED=2;
 		}
 		
 		if(gc.getInput().isKeyPressed(Input.KEY_4)){
 			TICK_HEIGHT=555;
-			TICK_WIDTH=310;
+			TICK_WIDTH=410;
 			SELECTED=4;
-			MY_SCORE=0;
 		}
 		
 		if(gc.getInput().isKeyPressed(Input.KEY_ENTER)){
@@ -79,15 +114,15 @@ public class GameScreen extends BasicGameState{
 		g.setColor(Color.yellow);
 		g.drawString("Your Score", 50, 30);
 		g.drawRect(50, 50, 200, 50);
-		g.drawString(""+MY_SCORE+" Points", 90, 65);
-		g.drawString("Player : Name", 50, 110);
+		g.drawString(""+player1Score+" Points", 90, 65);
+		g.drawString("Player : "+player1Name, 50, 110);
 		
 		//For Opponents score
 		g.setColor(Color.red);
 		g.drawString("Opponent Score", 550, 30);
 		g.drawRect(550, 50, 200, 50);
-		g.drawString(""+OPPONENT_SCORE+" Points", 590, 65);
-		g.drawString("Player : Name", 550, 110);
+		g.drawString(""+ player2Score +" Points", 590, 65);
+		g.drawString("Player : "+player2Name, 550, 110);
 		
 		//For the message
 		g.setColor(Color.cyan);
@@ -95,25 +130,35 @@ public class GameScreen extends BasicGameState{
 		
 		//Display smile
 		g.drawImage(new Image(IMG_LOC), 330, 40);
-		
+
+
+		//Message Box at the bottom
+		g.setColor(Color.cyan);
+		g.drawRect(50,200,700,90);
+
+		//The message
+		g.setColor(Color.red);
+		g.drawString("Message:"+message2,275,225);
+
 		//For set of questions to be displayed
 		g.setColor(Color.white);
-		g.drawRect(50, 200, 700, 300);
-		
+		g.drawRect(50, 300, 700, 200);
+
+
 		//Display Question
 		g.setColor(Color.green);
 		if(question.length()>10){
-			g.drawString("Question: "+question, 150, 210);
+			g.drawString("Question: "+question, 150, 310);
 		}else{
-			g.drawString("Question: "+question, 280, 210);
+			g.drawString("Question: "+question, 280, 310);
 		}
 		
 		//Display possible answers
 		g.setColor(Color.white);
-		g.drawString("1:"+ans1, 90, 270);
-		g.drawString("2:"+ans2, 590, 270);
-		g.drawString("3:"+ans3, 90, 320);
-		g.drawString("4:"+ans4, 590, 320);
+		g.drawString("1:"+ans1, 90, 370);
+		g.drawString("2:"+ans2, 590, 370);
+		g.drawString("3:"+ans3, 90, 420);
+		g.drawString("4:"+ans4, 590, 420);
 		
 		//Display selector for answers
 		g.setColor(Color.green);
@@ -121,12 +166,13 @@ public class GameScreen extends BasicGameState{
 		
 		//Display box for selected answer
 		g.setColor(Color.white);
-		g.drawRect(50, 400, 700, 100);
+		g.drawRect(50, 510, 700, 60);
 		
 		//Display selected answer
 		g.setColor(Color.magenta);
-		g.drawString("You Selected Answer: "+SELECTED, 270, 410);
-		g.drawString("Press ENTER To Submit Amswer", 240, 430);
+		g.drawString("You Selected Answer: "+SELECTED, 270, 515);
+		g.drawString("Press ENTER To Submit Amswer", 240, 535);
+
 	}
 
 	public int getID() {
@@ -157,24 +203,33 @@ public class GameScreen extends BasicGameState{
 		IMG_LOC=loc;
 	}
 	
-	public void setMessage(String msg){
-		message=msg;
-	}
+	public void setMessage(String msg){message=msg;}
+
+	public void setMessage2(String msg){message2=msg;}
+
+	public void setPlayer1Score(int uScore){player1Score=uScore;}
 	
-	public void setUserScore(int uScore){
-		MY_SCORE=uScore;
-	}
-	
-	public void setOpponentScore(int oppScore){
-		OPPONENT_SCORE=oppScore;
+	public void setPlayer2Score(int oppScore){
+		player2Score =oppScore;
 	}
 	
 	public int getUserAnswer(){
-		//use the SELCTED int variable and minus 1 to we can see the access index for the question that the user selected.
-		return SELECTED-1;
+		System.out.println("RETURNED:"+SELECTED);
+		return (SELECTED-1);
 	}
+
+	public void setPlayer1Name(String opp){player1Name=opp;}
+
+	public void setPlayer2Name(String player){player2Name=player;}
+
+	public String getUsername(){return username;}
 
 	public boolean getAnswered(){
 		return hasAnswered;
 	}
+
+	public void setAnswered(boolean ans){hasAnswered=ans;}
+
+	public void setPlayer(int player){this.player=player;}
+
 }
