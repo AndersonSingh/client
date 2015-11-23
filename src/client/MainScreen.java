@@ -36,13 +36,14 @@ public class MainScreen extends BasicGameState{
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
 		
 		if(gc.getInput().isKeyPressed(Input.KEY_1)){
-			CURSOR_HEIGHT=90;
-			System.out.println("Username:"+username.getText());
+			CURSOR_HEIGHT=130;
+//			System.out.println("Username:"+username.getText());
+			GameScreen.setUserString(username.getText());
 			sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
 		}
 		
 		if(gc.getInput().isKeyPressed(Input.KEY_2)){
-			CURSOR_HEIGHT=110;
+			CURSOR_HEIGHT=150;
 			System.exit(1);
 		}
 	}
