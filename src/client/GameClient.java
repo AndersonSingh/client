@@ -36,6 +36,7 @@ public class GameClient {
         kryo.register(Question.class);
         kryo.register(Player.class);
         kryo.register(Forfeit.class);
+        kryo.register(BlockStatus.class);
         kryo.register(PlayerNames.class);
     }
 
@@ -54,16 +55,27 @@ public class GameClient {
             // in case we want to perform operations as soon as connection is made (before any objects are sent across from server)
             public void connected(Connection connection){
                 connection.setTimeout(10000);
-
-                // the client has connected to the server so we now register the player
-                RegisterPlayer message = new RegisterPlayer();
-
-                message.name = gameScreen.getUsername();
-                connection.sendTCP(message);
             }
 
             // this method is called when an object is received from the server
             public void received(Connection connection, Object obj){
+
+                // object to indicate whether or not this IP is blocked
+                if(obj instanceof  BlockStatus){
+                    if(((BlockStatus)obj).state){
+                        client.stop();
+
+                        System.out.println("DEBUG: Client IP is blocked.");
+                    }
+                    else{
+                        System.out.println("DEBUG: Client IP is not blocked.");
+                        // the client has connected and is not blocked so we now register the player
+                        RegisterPlayer message = new RegisterPlayer();
+
+                        message.name = gameScreen.getUsername();
+                        connection.sendTCP(message);
+                    }
+                }
 
                 //When a player object is received
                 if(obj instanceof Player){
@@ -188,6 +200,10 @@ public class GameClient {
 
     static public class Forfeit{
         public boolean playerForfeit;
+    }
+
+    static public class BlockStatus{
+        public boolean state;
     }
 
     static public class PlayerNames{

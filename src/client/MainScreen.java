@@ -55,7 +55,7 @@ public class MainScreen extends BasicGameState{
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawString("Quiz Wars", 50, 50);
-		g.drawString("Enter your fucking name:", 50, 70);
+		g.drawString("Enter your name:", 50, 70);
 		g.drawString(">", 35, CURSOR_HEIGHT);
 		g.drawString("1.Start Game", 50, 130);
 		g.drawString("2. Instructions",50,150);
