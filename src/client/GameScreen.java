@@ -47,6 +47,8 @@ public class GameScreen extends BasicGameState{
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
 		if(gameOver){
+			GameOverScreen.userScore=player1Score;
+			GameOverScreen.opponentScore=player2Score;
 			sbg.enterState(3, new FadeOutTransition(), new FadeInTransition());
 		}
 

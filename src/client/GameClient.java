@@ -9,9 +9,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.*;
 import game.Question;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-
 
 public class GameClient {
 
@@ -76,7 +73,6 @@ public class GameClient {
                         System.out.println("DEBUG: Client IP is not blocked.");
                         // the client has connected and is not blocked so we now register the player
                         RegisterPlayer message = new RegisterPlayer();
-
                         message.name = gameScreen.getUsername();
                         connection.sendTCP(message);
                     }
