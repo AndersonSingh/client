@@ -48,36 +48,19 @@ public class GameScreen extends BasicGameState{
 			gameClient = new GameClient(this);
 		}
 
-		if(player==0){
-			if(player1Score > player2Score){
-				setImageLocation("images/happy.png");
-				setMessage("You are Winning!");
-			}
-			else if(player2Score>player1Score){
-				setImageLocation("images/sad.png");
-				setMessage("You are Loosing!");
-			}
-			else{
-				setImageLocation("images/happy.png");
-				setMessage("The game is even!");
-			}
+		if(player1Score > player2Score){
+			setImageLocation("images/happy.png");
+			setMessage("You are Winning!");
+		}
+		else if(player2Score>player1Score){
+			setImageLocation("images/sad.png");
+			setMessage("You are Loosing!");
+		}
+		else{
+			setImageLocation("images/happy.png");
+			setMessage("The game is even!");
 		}
 
-		if(player==1){
-			if(player2Score>player1Score){
-				setImageLocation("images/happy.png");
-				setMessage("You are Winning!");
-			}
-			else if(player1Score>player2Score){
-				setImageLocation("images/sad.png");
-				setMessage("You are Loosing!");
-			}
-			else{
-				setImageLocation("images/happy.png");
-				setMessage("The game is even!");
-			}
-		}
-		
 		if(gc.getInput().isKeyPressed(Input.KEY_1)){
 			TICK_HEIGHT=55;
 			TICK_WIDTH=360;
@@ -107,10 +90,6 @@ public class GameScreen extends BasicGameState{
 			//update ui elements
 			hasAnswered=true;
 		}
-
-//		gameClient.sendKeepAlive(1000);
-
-
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
@@ -143,6 +122,7 @@ public class GameScreen extends BasicGameState{
 
 		//The message
 		g.setColor(Color.red);
+
 		g.drawString("Message:"+message2,275,225);
 
 		//For set of questions to be displayed
@@ -176,7 +156,7 @@ public class GameScreen extends BasicGameState{
 		//Display selected answer
 		g.setColor(Color.magenta);
 		g.drawString("You Selected Answer: "+SELECTED, 270, 515);
-		g.drawString("Press ENTER To Submit Amswer", 240, 535);
+		g.drawString("Press ENTER To Submit Answer", 240, 535);
 
 	}
 
@@ -218,10 +198,7 @@ public class GameScreen extends BasicGameState{
 		player2Score =oppScore;
 	}
 	
-	public int getUserAnswer(){
-		System.out.println("RETURNED:"+SELECTED);
-		return (SELECTED-1);
-	}
+	public int getUserAnswer(){return (SELECTED-1);}
 
 	public void setPlayer1Name(String opp){player1Name=opp;}
 
@@ -236,5 +213,4 @@ public class GameScreen extends BasicGameState{
 	public void setAnswered(boolean ans){hasAnswered=ans;}
 
 	public void setPlayer(int player){this.player=player;}
-
 }

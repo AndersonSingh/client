@@ -7,17 +7,17 @@ package client;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.*;
-import java.io.*;
 import game.Question;
 
+
 public class GameClient {
+
     static Client client;
     static String ip = "localhost";				// IP address of server
 //    static String ip = "192.168.1.108";
     static int max_block_time = 10000000;					// maximum time client blocks in attempting to connect to server
     static int tcp_port = 8082;
     static int udp_port = 8083;
-    BufferedReader inFromUser=null;
     GameScreen gameScreen;
     int player;
 
@@ -36,13 +36,13 @@ public class GameClient {
         kryo.register(Question.class);
         kryo.register(Player.class);
         kryo.register(Forfeit.class);
+        kryo.register(PlayerNames.class);
     }
 
     public GameClient(final GameScreen gameScreen){
         this.gameScreen=gameScreen;
 
         client = new Client();
-        inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
         // must be done before communication with server
         register(client);
@@ -50,42 +50,28 @@ public class GameClient {
         // starts a thread the outgoing connection
         new Thread(client).start();
 
-
-//        client.start();
-//        client.setKeepAliveTCP(2000);
-//        client.setTimeout(20000);
         client.addListener(new Listener(){
             // in case we want to perform operations as soon as connection is made (before any objects are sent across from server)
             public void connected(Connection connection){
+                connection.setTimeout(10000);
 
                 // the client has connected to the server so we now register the player
                 RegisterPlayer message = new RegisterPlayer();
 
-                // consider whether reading for name blocks for too long
-//                String name = gameScreen.getPlayerName();
-    		/*
-    			try{
-    				name = inFromUser.readLine();
-    			}
-    			catch(IOException e){
-    				System.out.println(e.getMessage());
-    			}
-    		*/
                 message.name = gameScreen.getUsername();
-                client.sendTCP(message);
-
+                connection.sendTCP(message);
             }
 
             // this method is called when an object is received from the server
             public void received(Connection connection, Object obj){
 
+                //When a player object is received
                 if(obj instanceof Player){
                     player=((Player) obj).playerId;
                     gameScreen.setPlayer(player);
                 }
 
-                // create and register question class
-
+                //When a question object is received
 				if(obj instanceof Question){
                     gameScreen.setMessage2("Waiting for your response...");
 					// display question to client
@@ -95,22 +81,20 @@ public class GameClient {
                     gameScreen.setAnswer2(options[1]);
                     gameScreen.setAnswer3(options[2]);
                     gameScreen.setAnswer4(options[3]);
-					// accept answer
-                    //need to implement some sort of wait until user presses enter
+
+//                  //need to implement some sort of wait until user presses enter to accept answer
+
                     while(!gameScreen.getAnswered()){
-                        //induces a wait
                         System.out.println("");
                     }
                     gameScreen.setAnswered(false);
+
                     //Once we have exited the while loop, this means that the user has pressed enter, meaning that they selected a choice
-//                  System.out.println(((Question) obj).getText());
 
                     QuestionResponse res = new QuestionResponse();
-//                  res.answer = 4;
                     //Get answer from game screen
                     System.out.println("USER ENTERED::"+gameScreen.getUserAnswer());
                     res.answer=gameScreen.getUserAnswer();
-//                    res.answer=3;
 //                  send answer to server
                     connection.sendTCP(res);
                     gameScreen.setMessage2("Answer Sent To Server");
@@ -118,25 +102,38 @@ public class GameClient {
 
 
                 if(obj instanceof PlayerScores){
-                    // update scores
-                    // display new scores
+                    // update and display scores
                     gameScreen.setMessage2("....");
-                    gameScreen.setPlayer1Score(((PlayerScores) obj).scores[0]);
-                    gameScreen.setPlayer2Score(((PlayerScores) obj).scores[1]);
-
+                    if(player==0){
+                        gameScreen.setMessage2("....");
+                        gameScreen.setPlayer1Score(((PlayerScores) obj).scores[0]);
+                        gameScreen.setPlayer2Score(((PlayerScores) obj).scores[1]);
+                    }
+                    else {
+                        gameScreen.setPlayer1Score(((PlayerScores) obj).scores[1]);
+                        gameScreen.setPlayer2Score(((PlayerScores) obj).scores[0]);
+                    }
                 }
 
+                if(obj instanceof PlayerNames){
+                    if(player==0){
+                        gameScreen.setPlayer1Name(((PlayerNames) obj).names[0]);
+                        gameScreen.setPlayer2Name(((PlayerNames) obj).names[1]);
+                    }
+                    else{
+                        gameScreen.setPlayer1Name(((PlayerNames) obj).names[1]);
+                        gameScreen.setPlayer2Name(((PlayerNames) obj).names[0]);
+                    }
+
+                }
                 if(obj instanceof QuestionFeedback){
                     // display feedback
                     gameScreen.setMessage2(((QuestionFeedback) obj).feedback);
-                    System.out.println("DEBUG: " + ((QuestionFeedback) obj).feedback);
-
                 }
 
                 if(obj instanceof PlayerWait){
                     // not sure what to do here
                     gameScreen.setMessage2("Waiting on other player....");
-                    System.out.println("DEBUG: Received a wait packet..");
                 }
 
                 if(obj instanceof EndGame){
@@ -144,11 +141,7 @@ public class GameClient {
                     // display winner
                     //need to call game over screen
                     gameScreen.setMessage2("Game Over");
-                    System.out.println("DEBUG: End game.");
                 }
-//                connection.setTimeout(1000);
-                connection.setKeepAliveTCP(5);
-                System.out.println("ALIVE!");
             }
 
             public void disconnected(Connection connection){
@@ -158,18 +151,12 @@ public class GameClient {
         });
 
         try{
-            client.connect(max_block_time, ip, tcp_port);
+            client.connect(max_block_time, ip, tcp_port,udp_port);
         }
         catch(Exception e){
             System.out.println("Error: " + e.getMessage());
         }
     }
-
-
-//    public static void main(String []args){
-//
-//        new GameClient();
-//    }
 
     static public class PlayerScores {
         public int scores[] = new int[2];
@@ -203,7 +190,7 @@ public class GameClient {
         public boolean playerForfeit;
     }
 
-    public void sendKeepAlive(int time) {
-        client.setKeepAliveTCP(time * 1000);
+    static public class PlayerNames{
+        public String[] names = new String[2];
     }
 }

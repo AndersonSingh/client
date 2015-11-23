@@ -37,13 +37,17 @@ public class MainScreen extends BasicGameState{
 		
 		if(gc.getInput().isKeyPressed(Input.KEY_1)){
 			CURSOR_HEIGHT=130;
-//			System.out.println("Username:"+username.getText());
 			GameScreen.setUserString(username.getText());
 			sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
 		}
-		
+
 		if(gc.getInput().isKeyPressed(Input.KEY_2)){
 			CURSOR_HEIGHT=150;
+			sbg.enterState(2, new FadeOutTransition(), new FadeInTransition());
+		}
+		
+		if(gc.getInput().isKeyPressed(Input.KEY_3)){
+			CURSOR_HEIGHT=170;
 			System.exit(1);
 		}
 	}
@@ -54,7 +58,8 @@ public class MainScreen extends BasicGameState{
 		g.drawString("Enter your fucking name:", 50, 70);
 		g.drawString(">", 35, CURSOR_HEIGHT);
 		g.drawString("1.Start Game", 50, 130);
-		g.drawString("2.Exit Game", 50, 150);
+		g.drawString("2. Instructions",50,150);
+		g.drawString("3.Exit Game", 50, 170);
 		spriteAnimation.draw(500, 400);
 		username.render(gc, g);
 	}

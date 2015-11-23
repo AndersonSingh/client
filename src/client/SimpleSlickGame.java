@@ -20,7 +20,7 @@ public class SimpleSlickGame extends StateBasedGame{
 			appgc.setAlwaysRender(true);
 			appgc.setTargetFrameRate(60);
 			appgc.start();
-		} 
+		}
 		catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -29,5 +29,6 @@ public class SimpleSlickGame extends StateBasedGame{
 	public void initStatesList(GameContainer container) throws SlickException {
 		this.addState(new MainScreen());
 		this.addState(new GameScreen());
+		this.addState(new InstructionsScreen());
 	}
 }
