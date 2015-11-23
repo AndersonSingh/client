@@ -10,6 +10,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import java.awt.*;
+
 public class GameScreen extends BasicGameState{
 	private int TICK_HEIGHT=60;
 	private int TICK_WIDTH=360;
@@ -17,7 +19,7 @@ public class GameScreen extends BasicGameState{
 	private int player2Score;
 	private int player1Score;
 	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,message2;
-	private boolean hasAnswered,serverStarted,gameOver,forfeit;
+	public boolean hasAnswered,serverStarted,gameOver,forfeit;
 	public static String player1Name,player2Name,username;
 	private int player;
 	GameClient gameClient;

@@ -9,6 +9,9 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.*;
 import game.Question;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+
 
 public class GameClient {
 
@@ -54,7 +57,7 @@ public class GameClient {
         client.addListener(new Listener(){
             // in case we want to perform operations as soon as connection is made (before any objects are sent across from server)
             public void connected(Connection connection){
-                connection.setTimeout(10000);
+//                connection.setTimeout(100000);
             }
 
             // this method is called when an object is received from the server
@@ -93,12 +96,13 @@ public class GameClient {
                     gameScreen.setAnswer2(options[1]);
                     gameScreen.setAnswer3(options[2]);
                     gameScreen.setAnswer4(options[3]);
-
+                    System.out.println("BEFORE WAIT!");
 //                  //need to implement some sort of wait until user presses enter to accept answer
-                    int x;
+//                    int x;
                     while(!gameScreen.getAnswered()){
-                        x=1;
+                        System.out.print("");
                     }
+                    System.out.println("AFTER WAIT!");
                     gameScreen.setAnswered(false);
 
                     //Once we have exited the while loop, this means that the user has pressed enter, meaning that they selected a choice
@@ -110,6 +114,7 @@ public class GameClient {
 //                  send answer to server
                     connection.sendTCP(res);
                     gameScreen.setMessage2("Answer Sent To Server");
+                    System.out.println("MESSAGE SENT OT SERVER!");
                 }
 
 
@@ -152,14 +157,19 @@ public class GameClient {
                     // inform game is over
                     // display winner
                     //need to call game over screen
+                    System.out.println("GAME END!");
                     gameScreen.setMessage2("Game Over");
                     gameScreen.setGameOver(true);
                 }
 
                 if(obj instanceof Forfeit){
+
+
+                    gameScreen.hasAnswered=true;
                     System.out.println("PLAYER WON SA!");
                     gameScreen.setMessage2("Opponent Quit!");
                     gameScreen.setOpponentForfeit(true);
+//                    gameScreen.setAnswered(true);
 
                 }
             }
