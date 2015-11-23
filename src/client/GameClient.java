@@ -13,18 +13,20 @@ import game.Question;
 public class GameClient {
     static Client client;
     static String ip = "localhost";				// IP address of server
-    //static String ip = "192.254.152.10";
-    static int max_block_time = 10000;					// maximum time client blocks in attempting to connect to server
+//    static String ip = "192.168.1.108";
+    static int max_block_time = 10000000;					// maximum time client blocks in attempting to connect to server
     static int tcp_port = 8082;
-    static int udp_port = 6789;
+    static int udp_port = 8083;
     BufferedReader inFromUser=null;
     GameScreen gameScreen;
+    int player;
 
     // this function registers the various classes so object instances can be sent over the network
     static public void register(EndPoint endpoint){
         Kryo kryo = endpoint.getKryo();
 
         kryo.register(String[].class);
+        kryo.register(int[].class);
         kryo.register(RegisterPlayer.class);
         kryo.register(PlayerScores.class);
         kryo.register(QuestionResponse.class);
@@ -32,13 +34,12 @@ public class GameClient {
         kryo.register(PlayerWait.class);
         kryo.register(EndGame.class);
         kryo.register(Question.class);
-
+        kryo.register(Player.class);
+        kryo.register(Forfeit.class);
     }
 
     public GameClient(final GameScreen gameScreen){
         this.gameScreen=gameScreen;
-        gameScreen.setAnswer1("HELLO");
-
 
         client = new Client();
         inFromUser = new BufferedReader(new InputStreamReader(System.in));
@@ -49,6 +50,10 @@ public class GameClient {
         // starts a thread the outgoing connection
         new Thread(client).start();
 
+
+//        client.start();
+//        client.setKeepAliveTCP(2000);
+//        client.setTimeout(20000);
         client.addListener(new Listener(){
             // in case we want to perform operations as soon as connection is made (before any objects are sent across from server)
             public void connected(Connection connection){
@@ -57,7 +62,7 @@ public class GameClient {
                 RegisterPlayer message = new RegisterPlayer();
 
                 // consider whether reading for name blocks for too long
-                String name = null;
+//                String name = gameScreen.getPlayerName();
     		/*
     			try{
     				name = inFromUser.readLine();
@@ -66,7 +71,7 @@ public class GameClient {
     				System.out.println(e.getMessage());
     			}
     		*/
-                message.name = "name";
+                message.name = gameScreen.getUsername();
                 client.sendTCP(message);
 
             }
@@ -74,10 +79,17 @@ public class GameClient {
             // this method is called when an object is received from the server
             public void received(Connection connection, Object obj){
 
+                if(obj instanceof Player){
+                    player=((Player) obj).playerId;
+                    gameScreen.setPlayer(player);
+                }
+
                 // create and register question class
 
 				if(obj instanceof Question){
+                    gameScreen.setMessage2("Waiting for your response...");
 					// display question to client
+                    gameScreen.setQuestion(((Question) obj).getText());
                     String[] options = ((Question) obj).getOptions();
                     gameScreen.setAnswer1(options[0]);
                     gameScreen.setAnswer2(options[1]);
@@ -87,41 +99,56 @@ public class GameClient {
                     //need to implement some sort of wait until user presses enter
                     while(!gameScreen.getAnswered()){
                         //induces a wait
+                        System.out.println("");
                     }
+                    gameScreen.setAnswered(false);
                     //Once we have exited the while loop, this means that the user has pressed enter, meaning that they selected a choice
 //                  System.out.println(((Question) obj).getText());
 
                     QuestionResponse res = new QuestionResponse();
 //                  res.answer = 4;
                     //Get answer from game screen
+                    System.out.println("USER ENTERED::"+gameScreen.getUserAnswer());
                     res.answer=gameScreen.getUserAnswer();
+//                    res.answer=3;
 //                  send answer to server
                     connection.sendTCP(res);
+                    gameScreen.setMessage2("Answer Sent To Server");
                 }
 
 
                 if(obj instanceof PlayerScores){
                     // update scores
                     // display new scores
-                    gameScreen.setUserScore(((PlayerScores) obj).player1Score);
-                    gameScreen.setOpponentScore(((PlayerScores) obj).player2Score);
+                    gameScreen.setMessage2("....");
+                    gameScreen.setPlayer1Score(((PlayerScores) obj).scores[0]);
+                    gameScreen.setPlayer2Score(((PlayerScores) obj).scores[1]);
+
                 }
 
                 if(obj instanceof QuestionFeedback){
                     // display feedback
+                    gameScreen.setMessage2(((QuestionFeedback) obj).feedback);
                     System.out.println("DEBUG: " + ((QuestionFeedback) obj).feedback);
+
                 }
 
                 if(obj instanceof PlayerWait){
                     // not sure what to do here
+                    gameScreen.setMessage2("Waiting on other player....");
                     System.out.println("DEBUG: Received a wait packet..");
                 }
 
                 if(obj instanceof EndGame){
                     // inform game is over
                     // display winner
+                    //need to call game over screen
+                    gameScreen.setMessage2("Game Over");
                     System.out.println("DEBUG: End game.");
                 }
+//                connection.setTimeout(1000);
+                connection.setKeepAliveTCP(5);
+                System.out.println("ALIVE!");
             }
 
             public void disconnected(Connection connection){
@@ -145,8 +172,7 @@ public class GameClient {
 //    }
 
     static public class PlayerScores {
-        public int player1Score;
-        public int player2Score;
+        public int scores[] = new int[2];
     }
 
     static public class QuestionResponse {
@@ -167,5 +193,17 @@ public class GameClient {
 
     static public class RegisterPlayer {
         public String name;
+    }
+
+    static public class Player{
+        public int playerId;
+    }
+
+    static public class Forfeit{
+        public boolean playerForfeit;
+    }
+
+    public void sendKeepAlive(int time) {
+        client.setKeepAliveTCP(time * 1000);
     }
 }

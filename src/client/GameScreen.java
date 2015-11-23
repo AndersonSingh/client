@@ -18,6 +18,7 @@ public class GameScreen extends BasicGameState{
 	private boolean hasAnswered,serverStarted;
 	public static String player1Name,player2Name,username;
 	private int player;
+	GameClient gameClient;
 
 	public static void setUserString(String str){
 		username=str;
@@ -44,7 +45,7 @@ public class GameScreen extends BasicGameState{
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
 		if(!serverStarted){
 			serverStarted=true;
-			GameClient gameClient = new GameClient(this);
+			gameClient = new GameClient(this);
 		}
 
 		if(player==0){
@@ -106,6 +107,10 @@ public class GameScreen extends BasicGameState{
 			//update ui elements
 			hasAnswered=true;
 		}
+
+//		gameClient.sendKeepAlive(1000);
+
+
 	}
 
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
