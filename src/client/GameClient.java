@@ -95,9 +95,9 @@ public class GameClient {
                     gameScreen.setAnswer4(options[3]);
 
 //                  //need to implement some sort of wait until user presses enter to accept answer
-
+                    int x;
                     while(!gameScreen.getAnswered()){
-                        System.out.println("");
+                        x=1;
                     }
                     gameScreen.setAnswered(false);
 
@@ -157,8 +157,10 @@ public class GameClient {
                 }
 
                 if(obj instanceof Forfeit){
+                    System.out.println("PLAYER WON SA!");
                     gameScreen.setMessage2("Opponent Quit!");
                     gameScreen.setOpponentForfeit(true);
+
                 }
             }
 

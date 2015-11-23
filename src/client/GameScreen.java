@@ -31,9 +31,9 @@ public class GameScreen extends BasicGameState{
 		gameOver=false;
 		forfeit=false;
 		serverStarted=false;
+		hasAnswered=false;
 		setPlayer1Score(0);
 		setPlayer2Score(0);
-		hasAnswered=false;
 		setPlayer1Name("...");
 		setPlayer2Name("...");
 		setAnswer1("...");
