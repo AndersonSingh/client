@@ -23,6 +23,7 @@ public class GameClient {
     static int udp_port = 8083;
     GameScreen gameScreen;
     int player;
+    static Connection connCpy=null;
 
     // this function registers the various classes so object instances can be sent over the network
     static public void register(EndPoint endpoint){
@@ -58,6 +59,7 @@ public class GameClient {
             // in case we want to perform operations as soon as connection is made (before any objects are sent across from server)
             public void connected(Connection connection){
 //                connection.setTimeout(100000);
+                connCpy=connection;
             }
 
             // this method is called when an object is received from the server
@@ -96,25 +98,6 @@ public class GameClient {
                     gameScreen.setAnswer2(options[1]);
                     gameScreen.setAnswer3(options[2]);
                     gameScreen.setAnswer4(options[3]);
-                    System.out.println("BEFORE WAIT!");
-//                  //need to implement some sort of wait until user presses enter to accept answer
-//                    int x;
-                    while(!gameScreen.getAnswered()){
-                        System.out.print("");
-                    }
-                    System.out.println("AFTER WAIT!");
-                    gameScreen.setAnswered(false);
-
-                    //Once we have exited the while loop, this means that the user has pressed enter, meaning that they selected a choice
-
-                    QuestionResponse res = new QuestionResponse();
-                    //Get answer from game screen
-                    System.out.println("USER ENTERED::"+gameScreen.getUserAnswer());
-                    res.answer=gameScreen.getUserAnswer();
-//                  send answer to server
-                    connection.sendTCP(res);
-                    gameScreen.setMessage2("Answer Sent To Server");
-                    System.out.println("MESSAGE SENT OT SERVER!");
                 }
 
 
@@ -163,9 +146,6 @@ public class GameClient {
                 }
 
                 if(obj instanceof Forfeit){
-
-
-                    gameScreen.hasAnswered=true;
                     System.out.println("PLAYER WON SA!");
                     gameScreen.setMessage2("Opponent Quit!");
                     gameScreen.setOpponentForfeit(true);
@@ -185,6 +165,14 @@ public class GameClient {
         }
         catch(Exception e){
             System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    static public void sendUserResponse(int ans){
+        QuestionResponse res = new QuestionResponse();
+        res.answer=ans-1;
+        if(connCpy!=null) {
+            connCpy.sendTCP(res);
         }
     }
 

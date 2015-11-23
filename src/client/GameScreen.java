@@ -1,10 +1,8 @@
 package client;
+import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -19,7 +17,7 @@ public class GameScreen extends BasicGameState{
 	private int player2Score;
 	private int player1Score;
 	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,message2;
-	public boolean hasAnswered,serverStarted,gameOver,forfeit;
+	private boolean serverStarted,gameOver,forfeit;
 	public static String player1Name,player2Name,username;
 	private int player;
 	GameClient gameClient;
@@ -33,7 +31,6 @@ public class GameScreen extends BasicGameState{
 		gameOver=false;
 		forfeit=false;
 		serverStarted=false;
-		hasAnswered=false;
 		setPlayer1Score(0);
 		setPlayer2Score(0);
 		setPlayer1Name("...");
@@ -102,7 +99,8 @@ public class GameScreen extends BasicGameState{
 		if(gc.getInput().isKeyPressed(Input.KEY_ENTER)){
 			//Send response to server
 			//update ui elements
-			hasAnswered=true;
+			GameClient.sendUserResponse(SELECTED);
+			setMessage2("Response sent to server.");
 		}
 	}
 
@@ -219,12 +217,6 @@ public class GameScreen extends BasicGameState{
 	public void setPlayer2Name(String player){player2Name=player;}
 
 	public String getUsername(){return username;}
-
-	public boolean getAnswered(){
-		return hasAnswered;
-	}
-
-	public void setAnswered(boolean ans){hasAnswered=ans;}
 
 	public void setPlayer(int player){this.player=player;}
 
