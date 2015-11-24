@@ -65,7 +65,7 @@ public class GameClient {
                 // object to indicate whether or not this IP is blocked
                 if(obj instanceof  BlockStatus){
                     if(((BlockStatus)obj).state){
-
+                        gameScreen.setBlocked(true);
                         client.stop();
                         System.out.println("DEBUG: Client IP is blocked.");
                     }
@@ -137,19 +137,17 @@ public class GameClient {
                     // inform game is over
                     // display winner
                     //need to call game over screen
+                    client.stop();
                     System.out.println("GAME END!");
                     gameScreen.setMessage2("Game Over");
                     gameScreen.setGameOver(true);
                 }
 
                 if(obj instanceof Forfeit){
+                    client.stop();
                     System.out.println("PLAYER WON SA!");
                     gameScreen.setMessage2("Opponent Quit!");
                     gameScreen.setOpponentForfeit(true);
-                }
-
-                if(obj instanceof BlockStatus){
-                    gameScreen.setFeedback("ERROR: IP Address Blocked.");
                 }
             }
 

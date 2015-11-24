@@ -18,7 +18,7 @@ public class GameScreen extends BasicGameState{
 	private int player2Score;
 	private int player1Score;
 	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,message2,feedback;
-	private boolean serverStarted,gameOver,forfeit;
+	private boolean serverStarted,gameOver,forfeit,blocked;
 	public static String player1Name,player2Name,username;
 	private int player;
 	GameClient gameClient;
@@ -41,6 +41,7 @@ public class GameScreen extends BasicGameState{
 		gameOver=false;
 		forfeit=false;
 		serverStarted=false;
+		setBlocked(false);
 		setFeedback("No Feedback");
 		setPlayer1Score(0);
 		setPlayer2Score(0);
@@ -61,6 +62,10 @@ public class GameScreen extends BasicGameState{
 			GameOverScreen.userScore=player1Score;
 			GameOverScreen.opponentScore=player2Score;
 			sbg.enterState(3, new FadeOutTransition(), new FadeInTransition());
+		}
+
+		if(blocked){
+			sbg.enterState(5, new FadeOutTransition(), new FadeInTransition());
 		}
 
 		if(forfeit){
@@ -235,4 +240,6 @@ public class GameScreen extends BasicGameState{
 	public void setOpponentForfeit(boolean forfeit){	this.forfeit=forfeit;}
 
 	public void setFeedback(String feedback){this.feedback = feedback;}
+
+	public void setBlocked(boolean blocked){this.blocked=blocked;}
 }

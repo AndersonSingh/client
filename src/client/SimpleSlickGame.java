@@ -30,5 +30,6 @@ public class SimpleSlickGame extends StateBasedGame{
 		this.addState(new InstructionsScreen());
 		this.addState(new GameOverScreen());
 		this.addState(new Forfeit());
+		this.addState(new BlockedScreen());
 	}
 }
