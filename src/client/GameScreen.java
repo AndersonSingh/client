@@ -83,7 +83,7 @@ public class GameScreen extends BasicGameState{
 		}
 		else if(player2Score>player1Score){
 			setImageLocation("images/sad.png");
-			setMessage("You are Loosing!");
+			setMessage("You are Losing!");
 		}
 		else{
 			setImageLocation("images/happy.png");
