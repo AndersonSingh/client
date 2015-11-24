@@ -156,7 +156,7 @@ public class GameScreen extends BasicGameState{
 
 		//Display Question
 		g.setColor(Color.green);
-		if(question.length()>10){
+		if(question.length()>15){
 			font2.drawString(150,310,"Question: "+question,Color.green);
 		}else{
 			font2.drawString(280,310,"Question: "+question,Color.green);

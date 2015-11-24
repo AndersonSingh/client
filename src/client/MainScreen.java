@@ -12,10 +12,8 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import java.awt.Font;
 
 public class MainScreen extends BasicGameState{
-	private SpriteSheet spriteSheet;
-	private Animation spriteAnimation;
 	private int CURSOR_HEIGHT=130;
-	private TextField username;
+	private TextField username,ipAddress;
 	private TrueTypeFont font;
 	private boolean antiAlias=true;
 	private Music music;
@@ -34,23 +32,32 @@ public class MainScreen extends BasicGameState{
         username.setAcceptingInput(true);
         username.setCursorVisible(true);
         username.setText("Player1");
+
+		this.ipAddress = new TextField(gc, gc.getDefaultFont(), 250, 105, 200, 20);
+		ipAddress.setBorderColor(Color.black);
+		ipAddress.setBackgroundColor(Color.darkGray);
+		ipAddress.setTextColor(Color.green);
+		ipAddress.setAcceptingInput(true);
+		ipAddress.setCursorVisible(true);
+		ipAddress.setText("Address");
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
 		
-		if(gc.getInput().isKeyPressed(Input.KEY_1)){
+		if(gc.getInput().isKeyPressed(Input.KEY_F1)){
 			CURSOR_HEIGHT=130;
 			GameScreen.setUserString(username.getText());
+			GameClient.ip= ipAddress.getText();
 			sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
 		}
 
-		if(gc.getInput().isKeyPressed(Input.KEY_2)){
+		if(gc.getInput().isKeyPressed(Input.KEY_F2)){
 			CURSOR_HEIGHT=150;
 			sbg.enterState(2, new FadeOutTransition(), new FadeInTransition());
 		}
 		
-		if(gc.getInput().isKeyPressed(Input.KEY_3)){
+		if(gc.getInput().isKeyPressed(Input.KEY_F3)){
 			CURSOR_HEIGHT=170;
 			System.exit(1);
 		}
@@ -61,14 +68,16 @@ public class MainScreen extends BasicGameState{
 		font.drawString(50,50,"Quiz Wars",Color.green);
 		g.setColor(Color.orange);
 		g.drawString("Enter your name:", 50, 85);
+		g.drawString("Enter Sever IP Address:", 50, 105);
 		g.setColor(Color.green);
 		g.drawString(">", 35, CURSOR_HEIGHT);
 		g.setColor(Color.lightGray);
-		g.drawString("1. Start Game", 50, 130);
-		g.drawString("2. Instructions",50,150);
-		g.drawString("3. Exit Game", 50, 170);
+		g.drawString("F1. Start Game", 50, 130);
+		g.drawString("F2. Instructions",50,150);
+		g.drawString("F3. Exit Game", 50, 170);
 //		spriteAnimation.draw(500, 400);
 		username.render(gc, g);
+		ipAddress.render(gc, g);
 		g.drawImage(new Image("images/quiz_night.jpg"), 300, 200);
 	}
 

@@ -13,7 +13,7 @@ import game.Question;
 public class GameClient {
 
     static Client client;
-    static String ip = "localhost";				// IP address of server
+    static String ip;				// IP address of server
 //    static String ip = "192.168.1.108";
     static int max_block_time = 10000000;					// maximum time client blocks in attempting to connect to server
     static int tcp_port = 8082;

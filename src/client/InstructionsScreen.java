@@ -34,11 +34,11 @@ public class InstructionsScreen extends BasicGameState{
         graphics.drawString("  then has to press enter to submit his/her response.",60,180);
 
         graphics.setColor(Color.orange);
-        graphics.drawString("Press 1 to Return to Main Screen",50,210);
+        graphics.drawString("Press F1 to Return to Main Screen",50,210);
     }
 
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
-        if(gameContainer.getInput().isKeyPressed(Input.KEY_1)){
+        if(gameContainer.getInput().isKeyPressed(Input.KEY_F1)){
             stateBasedGame.enterState(0, new FadeOutTransition(), new FadeInTransition());
         }
     }
