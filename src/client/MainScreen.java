@@ -1,29 +1,33 @@
 package client;
 
-import org.newdawn.slick.Animation;
+import org.newdawn.slick.*;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import java.awt.Font;
 
 public class MainScreen extends BasicGameState{
 	private SpriteSheet spriteSheet;
 	private Animation spriteAnimation;
 	private int CURSOR_HEIGHT=130;
 	private TextField username;
-	
+	private TrueTypeFont font;
+	private boolean antiAlias=true;
+	private Music music;
+
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		spriteSheet = new SpriteSheet("images/santa.png",165,173);
-		spriteAnimation = new Animation(spriteSheet,100);
-	    this.username = new TextField(gc, gc.getDefaultFont(), 220, 70, 200, 20);
+//		music = new Music("images/tune.ogg");
+
+		Font awtFont = new Font("Cambria", Font.PLAIN , 28);
+		font = new TrueTypeFont(awtFont, antiAlias);
+
+	    this.username = new TextField(gc, gc.getDefaultFont(), 220, 85, 200, 20);
 	    username.setBorderColor(Color.black);
         username.setBackgroundColor(Color.darkGray);
         username.setTextColor(Color.green);
@@ -54,14 +58,18 @@ public class MainScreen extends BasicGameState{
 	
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.drawString("Quiz Wars", 50, 50);
-		g.drawString("Enter your name:", 50, 70);
+		font.drawString(50,50,"Quiz Wars",Color.green);
+		g.setColor(Color.orange);
+		g.drawString("Enter your name:", 50, 85);
+		g.setColor(Color.green);
 		g.drawString(">", 35, CURSOR_HEIGHT);
+		g.setColor(Color.lightGray);
 		g.drawString("1. Start Game", 50, 130);
 		g.drawString("2. Instructions",50,150);
 		g.drawString("3. Exit Game", 50, 170);
-		spriteAnimation.draw(500, 400);
+//		spriteAnimation.draw(500, 400);
 		username.render(gc, g);
+		g.drawImage(new Image("images/quiz_night.jpg"), 300, 200);
 	}
 
 	@Override

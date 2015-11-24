@@ -124,7 +124,8 @@ public class GameClient {
                 }
                 if(obj instanceof QuestionFeedback){
                     // display feedback
-                    gameScreen.setMessage2(((QuestionFeedback) obj).feedback);
+//                    gameScreen.setMessage2(((QuestionFeedback) obj).feedback);
+                    gameScreen.setFeedback(((QuestionFeedback) obj).feedback);
                 }
 
                 if(obj instanceof PlayerWait){
@@ -145,8 +146,6 @@ public class GameClient {
                     System.out.println("PLAYER WON SA!");
                     gameScreen.setMessage2("Opponent Quit!");
                     gameScreen.setOpponentForfeit(true);
-//                    gameScreen.setAnswered(true);
-
                 }
             }
 

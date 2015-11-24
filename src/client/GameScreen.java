@@ -9,28 +9,39 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import java.awt.*;
+import java.awt.Font;
 
 public class GameScreen extends BasicGameState{
-	private int TICK_HEIGHT=60;
+	private int TICK_HEIGHT=55;
 	private int TICK_WIDTH=360;
 	private int SELECTED;
 	private int player2Score;
 	private int player1Score;
-	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,message2;
+	private String ans1,ans2,ans3,ans4,question,IMG_LOC,message,message2,feedback;
 	private boolean serverStarted,gameOver,forfeit;
 	public static String player1Name,player2Name,username;
 	private int player;
 	GameClient gameClient;
-
+	private TrueTypeFont font,font2;
+	private boolean antiAlias=true;
 	public static void setUserString(String str){
 		username=str;
 	}
 
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		Font awtFont = new Font("Cambria", Font.HANGING_BASELINE , 18);
+		font = new TrueTypeFont(awtFont, antiAlias);
+
+		Font awtFont2 = new Font("Cambria", Font.PLAIN , 18);
+		font2 = new TrueTypeFont(awtFont2, antiAlias);
+
+		SELECTED=1;
+
 		gameOver=false;
 		forfeit=false;
 		serverStarted=false;
+		setFeedback("No Feedback");
 		setPlayer1Score(0);
 		setPlayer2Score(0);
 		setPlayer1Name("...");
@@ -42,7 +53,7 @@ public class GameScreen extends BasicGameState{
 		setQuestion("...");
 		setImageLocation("images/happy.png");
 		setMessage("...");
-		setMessage2("...");
+		setMessage2("Waiting on other player to connect...");
 	}
 	
 	public void update(GameContainer gc, StateBasedGame sbg, int arg2) throws SlickException {
@@ -123,21 +134,20 @@ public class GameScreen extends BasicGameState{
 		g.drawString("Player : "+player2Name, 550, 110);
 		
 		//For the message
-		g.setColor(Color.cyan);
-		g.drawString(message, 330, 10);
+		font.drawString(330,10,message,Color.green);
 		
 		//Display smile
 		g.drawImage(new Image(IMG_LOC), 330, 40);
-
 
 		//Message Box at the bottom
 		g.setColor(Color.cyan);
 		g.drawRect(50,200,700,90);
 
 		//The message
-		g.setColor(Color.red);
-
-		g.drawString("Message:"+message2,275,225);
+		font2.drawString(275,210,"Message: "+message2,Color.lightGray);
+		g.setColor(Color.orange);
+		font2.drawString(275,245,"Feedback: "+feedback,Color.lightGray);
+		g.setColor(Color.orange);
 
 		//For set of questions to be displayed
 		g.setColor(Color.white);
@@ -147,13 +157,13 @@ public class GameScreen extends BasicGameState{
 		//Display Question
 		g.setColor(Color.green);
 		if(question.length()>10){
-			g.drawString("Question: "+question, 150, 310);
+			font2.drawString(150,310,"Question: "+question,Color.green);
 		}else{
-			g.drawString("Question: "+question, 280, 310);
+			font2.drawString(280,310,"Question: "+question,Color.green);
 		}
 		
 		//Display possible answers
-		g.setColor(Color.white);
+		g.setColor(Color.orange);
 		g.drawString("1:"+ans1, 90, 370);
 		g.drawString("2:"+ans2, 590, 370);
 		g.drawString("3:"+ans3, 90, 420);
@@ -164,13 +174,13 @@ public class GameScreen extends BasicGameState{
 		g.drawImage(new Image("images/arrow.png"), TICK_HEIGHT, TICK_WIDTH);
 		
 		//Display box for selected answer
-		g.setColor(Color.white);
+		g.setColor(Color.cyan);
 		g.drawRect(50, 510, 700, 60);
 		
 		//Display selected answer
-		g.setColor(Color.magenta);
-		g.drawString("You Selected Answer: "+SELECTED, 270, 515);
-		g.drawString("Press ENTER To Submit Answer", 240, 535);
+		g.setColor(Color.gray);
+		font2.drawString(270,515,"You Selected Answer: "+SELECTED,Color.lightGray);
+		font2.drawString(240,535,"Press 'ENTER' To Submit Answer",Color.lightGray);
 
 	}
 
@@ -211,8 +221,6 @@ public class GameScreen extends BasicGameState{
 	public void setPlayer2Score(int oppScore){
 		player2Score =oppScore;
 	}
-	
-	public int getUserAnswer(){return (SELECTED-1);}
 
 	public void setPlayer1Name(String opp){player1Name=opp;}
 
@@ -225,4 +233,6 @@ public class GameScreen extends BasicGameState{
 	public void setGameOver(boolean gameState){this.gameOver=gameState;}
 
 	public void setOpponentForfeit(boolean forfeit){	this.forfeit=forfeit;}
+
+	public void setFeedback(String feedback){this.feedback = feedback;}
 }
