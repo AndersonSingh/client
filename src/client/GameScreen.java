@@ -7,8 +7,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
-
-import java.awt.*;
 import java.awt.Font;
 
 public class GameScreen extends BasicGameState{
@@ -24,10 +22,6 @@ public class GameScreen extends BasicGameState{
 	GameClient gameClient;
 	private TrueTypeFont font,font2;
 	private boolean antiAlias=true;
-	public static void setUserString(String str){
-		username=str;
-	}
-
 
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		Font awtFont = new Font("Cambria", Font.HANGING_BASELINE , 18);
@@ -36,7 +30,7 @@ public class GameScreen extends BasicGameState{
 		Font awtFont2 = new Font("Cambria", Font.PLAIN , 18);
 		font2 = new TrueTypeFont(awtFont2, antiAlias);
 
-		SELECTED=1;
+		SELECTED=2;
 
 		gameOver=false;
 		forfeit=false;
@@ -242,4 +236,8 @@ public class GameScreen extends BasicGameState{
 	public void setFeedback(String feedback){this.feedback = feedback;}
 
 	public void setBlocked(boolean blocked){this.blocked=blocked;}
+
+	public static void setUserString(String str){
+		username=str;
+	}
 }

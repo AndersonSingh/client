@@ -9,6 +9,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.Music;
 import java.awt.Font;
 
 public class MainScreen extends BasicGameState{
@@ -21,6 +22,7 @@ public class MainScreen extends BasicGameState{
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 //		music = new Music("images/tune.ogg");
+//		music.loop();
 
 		Font awtFont = new Font("Cambria", Font.PLAIN , 28);
 		font = new TrueTypeFont(awtFont, antiAlias);
@@ -73,7 +75,7 @@ public class MainScreen extends BasicGameState{
 		font.drawString(50,50,"Quiz Wars",Color.green);
 		g.setColor(Color.orange);
 		g.drawString("Enter your name:", 50, 85);
-		g.drawString("Enter Sever IP Address:", 50, 105);
+		g.drawString("Enter Server IP Address:", 50, 105);
 		g.setColor(Color.green);
 		g.drawString(">", 35, CURSOR_HEIGHT);
 		g.setColor(Color.lightGray);
