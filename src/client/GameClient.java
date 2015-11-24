@@ -3,18 +3,14 @@ package client;
 /**
  * Created by user on 11/21/15.
  */
-
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.*;
 import game.Question;
 
 
 public class GameClient {
-
     public static Client client;
-    private static String ip;				// IP address of server
-//    static String ip = "192.168.1.108";
+    private static String ip;				                        // IP address of server
     private static int max_block_time = 10000000;					// maximum time client blocks in attempting to connect to server
     private static int tcp_port = 8082;
     private static int udp_port = 8083;
@@ -138,14 +134,12 @@ public class GameClient {
                     // display winner
                     //need to call game over screen
                     client.stop();
-                    System.out.println("GAME END!");
                     gameScreen.setMessage2("Game Over");
                     gameScreen.setGameOver(true);
                 }
 
                 if(obj instanceof Forfeit){
                     client.stop();
-                    System.out.println("PLAYER WON SA!");
                     gameScreen.setMessage2("Opponent Quit!");
                     gameScreen.setOpponentForfeit(true);
                 }

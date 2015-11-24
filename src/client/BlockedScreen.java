@@ -29,7 +29,7 @@ public class BlockedScreen extends BasicGameState {
         font.drawString(350,50,"ERROR", Color.red);
         graphics.setColor(Color.orange);
         graphics.drawString("> Press 'Enter' to exit game.",50,130);
-        font2.drawString(250,350,"ERROR: 001 - IP Address is Blocked!",Color.lightGray);
+        font2.drawString(230,350,"ERROR: 001 - IP Address is Blocked!",Color.lightGray);
     }
 
     @Override
