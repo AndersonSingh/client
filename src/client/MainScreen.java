@@ -48,7 +48,12 @@ public class MainScreen extends BasicGameState{
 		if(gc.getInput().isKeyPressed(Input.KEY_F1)){
 			CURSOR_HEIGHT=130;
 			GameScreen.setUserString(username.getText());
-			GameClient.ip= ipAddress.getText();
+			if(ipAddress.getText().isEmpty() || ipAddress.getText().equals("Address")){
+				GameClient.setIPAddress("localhost");
+			}
+			else {
+				GameClient.setIPAddress(ipAddress.getText());
+			}
 			sbg.enterState(1, new FadeOutTransition(), new FadeInTransition());
 		}
 

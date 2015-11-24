@@ -12,15 +12,15 @@ import game.Question;
 
 public class GameClient {
 
-    static Client client;
-    static String ip;				// IP address of server
+    public static Client client;
+    private static String ip;				// IP address of server
 //    static String ip = "192.168.1.108";
-    static int max_block_time = 10000000;					// maximum time client blocks in attempting to connect to server
-    static int tcp_port = 8082;
-    static int udp_port = 8083;
-    GameScreen gameScreen;
-    int player;
-    static Connection connCpy=null;
+    private static int max_block_time = 10000000;					// maximum time client blocks in attempting to connect to server
+    private static int tcp_port = 8082;
+    private static int udp_port = 8083;
+    public GameScreen gameScreen;
+    public int player;
+    private static Connection connCpy=null;
 
     // this function registers the various classes so object instances can be sent over the network
     static public void register(EndPoint endpoint){
@@ -147,6 +147,10 @@ public class GameClient {
                     gameScreen.setMessage2("Opponent Quit!");
                     gameScreen.setOpponentForfeit(true);
                 }
+
+                if(obj instanceof BlockStatus){
+                    gameScreen.setFeedback("ERROR: IP Address Blocked.");
+                }
             }
 
             public void disconnected(Connection connection){
@@ -169,6 +173,10 @@ public class GameClient {
         if(connCpy!=null) {
             connCpy.sendTCP(res);
         }
+    }
+
+    static public void setIPAddress(String ipAddress){
+        ip=ipAddress;
     }
 
     static public class PlayerScores {

@@ -144,9 +144,9 @@ public class GameScreen extends BasicGameState{
 		g.drawRect(50,200,700,90);
 
 		//The message
-		font2.drawString(275,210,"Message: "+message2,Color.lightGray);
+		font2.drawString(240,210,"Message: "+message2,Color.lightGray);
 		g.setColor(Color.orange);
-		font2.drawString(275,245,"Feedback: "+feedback,Color.lightGray);
+		font2.drawString(255,245,"Feedback: "+feedback,Color.lightGray);
 		g.setColor(Color.orange);
 
 		//For set of questions to be displayed
